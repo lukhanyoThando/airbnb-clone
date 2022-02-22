@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { title } from 'process'
 import Banner from '../components/Banner'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -8,17 +9,30 @@ import LargeCard from '../components/LargeCard'
 import { MediumCard } from '../components/MediumCard'
 import SmallCards from '../components/SmallCards'
 
-interface data{
-  img : string,
-  location:string,
-  distance:string
+
+interface datatype{
+  exploreData:exploreData [],
+  cardsData:cardsData[]
 }
 
-const Home: NextPage = ({exploreData, cardsData}) => {
+interface exploreData{
+  img : string,
+  location:string,
+  distance:string,
+ 
+}
+interface cardsData{
+  title:string, 
+  img:string
+}
+
+const Home: NextPage<datatype> = ({exploreData, cardsData}) => {
   return (
+    
     <div className="">
+      {/* {console.log(exploreData)} */}
       <Head>
-        <title>Luks Airbnb</title>
+        <title>My Airbnb clone</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
     
@@ -35,7 +49,7 @@ const Home: NextPage = ({exploreData, cardsData}) => {
 
         {/**Pull some data from server -Api endpoints*/}
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        {exploreData?.map((item:data) => (
+        {exploreData?.map((item:exploreData) => (
           <SmallCards key={item.img}
           img={item.img}
           distance={item.distance}
@@ -47,10 +61,10 @@ const Home: NextPage = ({exploreData, cardsData}) => {
       <section>
         <h2 className='text-4xl font-semibold py-8'>Live Anywahere</h2>
         <div className='flex space-x-3 overflow-scroll scrollbar-hide p-3 -ml-3'>
-        {cardsData?.map((item:data)=>(
+        {cardsData?.map((item:cardsData)=>(
           <MediumCard key={item.img} 
           img={item.img}
-          title={item.title}
+         title={item.title}
           />
         ))}
         </div>
@@ -65,6 +79,8 @@ const Home: NextPage = ({exploreData, cardsData}) => {
     </div>
   )
 }
+
+export default Home;
 
 export async function getStaticProps() {
   const exploreData = await fetch('https://links.papareact.com/pyp').then(
@@ -82,6 +98,3 @@ export async function getStaticProps() {
     }
   }
  }
-
-export default Home
-
